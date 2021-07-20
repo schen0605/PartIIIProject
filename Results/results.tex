@@ -1,0 +1,335 @@
+
+\section{RESULTS AND \\DISCUSSION}
+
+\subsection{SPAD Simulations}
+
+Simulating the SPAD circuit in Fig. 3.6, Fig. 4.1 recreates the resultant current signal through $R_q$ seen in Fig. 2.4 alongside the corresponding charge of the capacitor, $C_d$. We see that the behaviour of the current is reflected by the behaviour of the capacitor i.e. the current is exponentially decreasing while the capacitor is recharging.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Graphics/SPAD/"SingleCurrentCharge"}
+  {\caption*{Fig. 4.1: A single SPAD simulation measuring the current through $R_q$ and the charge of the capacitor, $C_d$.}}
+\end{figure}
+
+\subsubsection{Variation of Parameters}
+
+Fig. 4.2 shows the effect of varying $R_q$ and $R_d$ in the SPAD circuit. Increasing the quenching resistance has a noticeable effect on both the magnitude of the current and the recovery time. Note that, since we have set the overvoltage to $1V$, decreasing the resistance much further will cause the current to exceed the operating limit of $20\mu A$. As expected, the variation of $R_d$ has a negligible effect on the shape of the signal for values $R_d\sim 1k\Omega$ although it is possible to see the effect of varying $R_d$ on the rising edge upon closer inspection. This is most evident for $R_d=5k\Omega$ where the rise time is noticeably longer than for the other values.
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SPAD/"VariedRq"}
+    \caption*{(a)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SPAD/"VariedRd"}
+    \caption*{(b)}
+  \end{subfigure}
+  {\caption*{Fig. 4.2: The variation of a) $R_q$ and b) $R_d$ in the SPAD.}}
+\end{figure}
+
+Similarly, the effect of varying $C_d$ is shown in Fig. 4.3. Again, as expected from Eq. 2.2, the recovery time increases as the capacitance increases. A capacitor with a higher capacitance also discharges a larger amount of charge that contributes to the gain. This is imitated in the current graph by a larger integral value for higher capacitances.
+
+Finally, we can see from Fig. 4.4 that no current is produced when the overvoltage is zero. Hence, there is no gain unless the biased voltage is about the breakdown voltage. As the overvoltage increases, we get an increased DC offset and gain.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Graphics/SPAD/"VariedCd"}
+  {\caption*{Fig. 4.3: The variation of $C_d$ in the SPAD. The larger charge discharged by the capacitor at higher $C_q$ corresponds to a higher gain.}}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Graphics/SPAD/"VariedVbias"}
+  {\caption*{Fig. 4.4: The effect of the overvoltage on the signal; no current is produced when the overvoltage is zero.}}
+\end{figure}
+
+\subsubsection{Gain}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Graphics/SPAD/"VbiasGain"}
+  {\caption*{Fig. 4.5: Plot of the simulated gain value against the overvoltage. We see that it is consistent with theory:  $G=\frac{(C_d+C_q)V_{ov}}{e}.$}}
+\end{figure}
+
+The gain was computed by direct numerical integration of the current through the quenching resistor $R_q$ with respect to time. The total charge was then divided by the elementary charge, $q$, to find the gain. Plotting the gain with respect to the overvoltage (\Fig. 4.5) shows that the model is consistent with the theory (\Eq. 2.3). It was found that Python's numerical integration using the trapezoidal rule and Simpson's rule produced similar results and so, for simplicity, the trapezoidal method was used. Note that when computing the integral, care must be taken to not include the current prior to the circuit triggering.
+
+\subsubsection{Recovery Time}
+
+The recovery time of the cell was extracted by taking the logarithm of the current signal falling edge and performing a linear regression; the recovery time is then the negative reciprocal of the gradient. Since $\tau_r = R_q(C_d+C_q)$ (Eq. 2.2), Fig. 4.6 compares the variation of these parameters with the theoretical value. We see that the model is consistent with the theory; the discrepancy between the calculated values and the theoretical value can be attributed to the way Spice outputs the discretised data. In addition, the simulated current signals do not exhibit ideal exponential decay and thus, the gradient is not perfectly linear.
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SPAD/"RqTau"}
+    \caption*{(a)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SPAD/"CdTau"}
+    \caption*{(b)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SPAD/"CqTau"}
+    \caption*{(c)}
+  \end{subfigure}
+  {\caption*{Fig. 4.6: The measured recovery time of the SPAD with respect to varying a) $R_q$, b) $C_d$ and c) $C_q$.}}
+\end{figure}
+
+\subsection{SiPM Simulations}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Graphics/SiPM/SingleVoltage}
+  {\caption*{Fig. 4.7: The output voltage signal of the SiPM for the two sets of parameter values Table 1. Two values for the total number of microcells were simulated: $N=400$ (solid line) and $N=3600$ (dashed line).}}
+\end{figure}
+
+As previously mentioned, the parameter values for the SiPM simulations were based on measured values of other SiPMs (Table 1). The main difference being the parasitic capacitance of the circuit taking a simple form that is linear with the total microcell number: $C_p=NC_g+15pF$ where $C_g=0.02pF$. Fig. 4.7 shows the voltage taken at the output terminal of the SiPM (neglecting the amplifier circuit) for the two different sets of parameter values with $N=400$ and $N=3600$. The signals corresponding to $N=3600$ are smaller in magnitude and longer in recovery time reflecting the additional impedance from the parsitic component.
+
+For convenience, we shall refer to the `FBK-Irst` and `Photonique` SiPMs as `SiPM 1' and `SiPM 2' respectively from now on. In addition, we shall focus our discussion on SiPM 1 since there are no additional insights that are gained from considering both. The equivalent, most significant results for SiPM 2 are presented in appendix D.
+
+\subsubsection{Variation of Parameters}
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"VariedCells"}
+    \caption*{(a)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"VariedFiredCells"}
+    \caption*{(b)}
+  \end{subfigure}
+  {\caption*{Fig. 4.8: Effect of a) varying the total number of microcells and b) the number of fired microcells on the output signal. Note that for (a), the $N=1$ case reduces back down to the SPAD case. In (b), the voltage signal is proportional to the number of fired microcells.}}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"FiredCellsSweep"}
+  {\caption*{Fig. 4.9: For different shunt resistances, the relative peak voltage was calculated from a small number of fired microcells up to saturation at $N_f=3600$. We get expected nonlinear behaviour due to the additional impedances in the SiPM.}}
+\end{figure}
+
+Fig. 4.8(a) further shows the effect of varying the total number of microcells; note that the $N=1$ case is equivalent to the SPAD presented earlier. The effect of increasing the number of fired microcells is shown in Fig. 4.8(b). We can clearly see that the amplitude of the output signal is proportional to the number of firing microcells. However, by simulating the saturation of the SiPM (Fig 4.9), the relationship is not directly linear. For a shunt resistance of $10\Omega$, doubling the number of fired microcells roughly increases the relative output voltage peak by $1.16$.
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"VariedRq"}
+    \caption*{(a)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"VariedRs"}
+    \caption*{(b)}
+  \end{subfigure}
+  {\caption*{Fig. 4.10: Variation of a) $R_q$ and b) the shunt resistance, $R_s$, in the SiPM. In (a) at $R=93k\Omega$, we start to see the signal decay resolve into a fast and a slow decaying component.}}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"VariedCd"}
+    \caption*{(a)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"VariedCq"}
+    \caption*{(b)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"VariedCp"}
+    \caption*{(c)}
+  \end{subfigure}
+  {\caption*{Fig. 4.11: Varitaion of a) $C_d$, b) $C_q$ and c) $C_p$ in the SiPM.}}
+\end{figure}
+
+Figs. 4.10-11 show the variation of the various resistors and capacitors in the SiPM circuit. We see, with the lowest quenching resistance, that the signal starts to resolve into a fast and a slow decay component. If the resistance is decreased further, we would see the voltage remain at a high value and no quenching occurs. The shunt resistor, $R_s$, offers a convenient way to practically probe the current at the SiPM terminal. In this case, increasing the shunt resistance has the opposite effect to increasing the quenching resistance - the signal becomes less quenching with increasing shunt resistance.
+
+Increasing the capacitance of $C_d$ decreases the peak voltage signal whereas the opposite is true for $C_q$. However, the gain increases when we increase either $C_d$ or $C_q$. Despite a lower signal peak when $C_d$ is increased, there is a longer decay time down to the baseline value. The opposite is true for $C_q$ where a higher signal peak also corresponds to a faster decay back down to baseline. In either case, the integral to find the gain is larger than the corresponding lower values. Unsurprisingly, increasing the parasitic capacitance lowers the voltage peak but increases the slow decay component.
+
+\subsubsection{Gain}
+
+The saturation up to $400$ microcells to calculate the relative gain is shown in Fig. 4.12 and the results of a linear regression is presented in Table 2. Similar to the relative peak voltage, the nonlinearity is expected due to the additional impedances in the circuit. Interestingly, most of the values of the shunt resistance for SiPM 2 resulted in a relative gain per microcell greater than $1$; this reflects the relative arbitrariness of how long the transient analysis should be ran for.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ |c|c|c| }
+ \hline
+ \textbf{Shunt} & &\\
+ \textbf{Resistance [$\Omega$]} & \textbf{SiPM 1} & \textbf{SiPM 2} \\
+ \hline
+ 1 & 0.854 & 1.12 \\
+ \hline
+ 10 & 0.837 & 1.08 \\
+ \hline
+ 50 & 0.795 & 1.03 \\
+ \hline
+ 100 & 0.753 & 0.983 \\
+ \hline
+\end{tabular}
+\caption*{Table 2: The linear regression values obtained from a plot of the relative gain against the number of firing microcells (see Fig. 4.12).}
+\end{table}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"FiredCellsGain"}
+  {\caption*{Fig. 4.12: For different shunt resistances, the relative gain compared to the single photon gain was calculated from a small number of fired microcells up to saturation at $N_f=400$. The values obtained from a linear regression are given in Table 2.}}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"VbiasGain"}
+  {\caption*{Fig. 4.13: Effect of the overvoltage on the SiPM gain. We get a linear fit: $G=(3.73\times 10^5V^{-1})V_{ov}$}
+\end{figure}
+
+\noindent As expected, the gain is directly proportional to the overvoltage (Fig. 4.13) - a linear fit of $G=(3.73\times 10^5V^{-1})V_{ov}$ is obtained. A quadratic fit was found to be necessary for the dependency of $C_d$ on the gain (Fig. 4.14(a)) while a linear fit was sufficient for $C_q$ (Fig. 4.14(b)). The results obtained were:
+
+\begin{multline*}
+  G=-(917fF^{-2})C_d^2+(2.40\times 10^5 fF^{-1})C_d \\-(5.77\times 10^6)
+\end{multline*}
+
+\noindent and
+
+\[
+  G=(2.01\times 10^5 fF^{-1})C_q-(1.13\times 10^6)
+\]
+
+\noindent respectively when the capacitances are quoted in $fF$. Note that it is possible for the gain to become negative at lower capacitance values - these are the unphysical regions of the model. Finally, the parasitic capacitance does not affect the gain (Fig. 4.14(c)) as expected.
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"CdGain"}
+    \caption*{(a)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"CqGain"}
+    \caption*{(b)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"CpGain"}
+    \caption*{(c)}
+  \end{subfigure}
+  {\caption*{Fig. 4.14: Effect of varying a) $C_d$, b) $C_q$ and c) $C_p$ on the gain. A quadratic fit is required for (a). As expected, there is no effect of varying $C_p$ on the gai since the parasitic component is independent and parallel to a firing microcell.}}
+\end{figure}
+
+\subsubsection{Recovery Time}
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"TcycRecovery"}
+    \caption*{(a)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"TcycRelPeak"}
+    \caption*{(b)}
+  \end{subfigure}
+  {\caption*{Fig. 4.15: To determine the SiPM microcell recovery time, a second photon triggers the circuit again after a specified time interval after the initial trigger. In (a), we see the secondary peak growing with an increasing time interval. The relative voltage peak of the secondary peak over time is shown in (b). The values of $\tau_{HP}=8.12ns$ and $\tau_{FP}=56.1ns$ are obtained.}}
+\end{figure}
+
+The method for determining the SiPM microcell recovery time was previously discussed. Fig. 4.15(a) shows how the time interval of the second photon affects the secondary voltage peak. We note down the minimal times it takes for the secondary signal to be half ($\tau_{HP}$) and equal ($\tau_{FP}$) to the original peak. Fig. 4.15(b) plots the relative size of the secondary peak against the time interval between the initial and secondary photons. The recovery times are given in Table 3.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ |c|c|c| }
+ \hline
+ \textbf{Recovery} & &\\
+ \textbf{Time} & \textbf{SiPM 1 [ns]} & \textbf{SiPM 2 [ns]} \\
+ \hline
+ $\tau_{HP}$ & 8.12\pm 0.87 & 18.1 \pm 1.25  \\
+ \hline
+ $\tau_{FP}$ & 56.1\pm 1.72 & 139 \pm 22 \\
+ \hline
+\end{tabular}
+\caption*{Table 3: The calculated recovery times for the 2 SiPMs. Error ranges were obtained from measuring the maximum deviations when adjusting the sensitivity of the model calculations.}
+\end{table}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"VovTau"}
+  {\caption*{Fig. 4.16: The effect of the overvoltage on the recovery time of a SiPM microcell. An unexpected, slight decrease in the recovery time is found which is attributed to the discretisation of the data.}}
+\end{figure}
+
+\noindent There is a slight decrease in the recovery time as the overvoltage increases (Fig. 4.16). However, this behaviour is not seen for SiPM 2 and the recovery time remains relatively constant with overvoltage. Thus, we attribute this behaviour to how the discretised data is being handled when calculating these values. The shorter recovery times associated with SiPM 1 leads to larger error bars. Fig. 4.17 show how the recovery time changes when $R_q$, $C_d$ and $C_q$ are varied. Table 4 summarises the results of performing a linear regression on the full peak recovery time.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ |c|c|c| }
+ \hline
+ \textbf{Varied} &\\
+ \textbf{Parameter} & \textbf{Linear Fit} \\
+ \hline
+ $R_q$ &  $(0.128 ns \ \Omega^{-1})R_q+38.9ns$  \\
+ \hline
+ $C_d$ & $(1.78 ns \ fF^{-1})C_d+30.3ns$  \\
+ \hline
+ $C_q$ &  $(2.04 ns \ fF^{-1})C_q+75.9ns$ \\
+ \hline
+\end{tabular}
+\caption*{Table 4: A linear fit of the recovery time with respect to the varied parameter}
+\end{table}
+
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"RqTau"}
+    \caption*{(a)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"CdTau"}
+    \caption*{(b)}
+  \end{subfigure}
+  \begin{subfigure}
+    \centering
+    \includegraphics[width=\linewidth]{Graphics/SiPM/SiPM1/"CqTau"}
+    \caption*{(c)}
+  \end{subfigure}
+  {\caption*{Fig. 4.17: Effect of varying a) $R_q$, b) $C_d$ and c) $C_q$ on the recovery time. The results of a linear fit on $\tau_{FP}$ are given in Table 4.}}
+\end{figure}
+
+\subsubsection{Amplifier Readout}
+
+For completeness, the readout with the amplifier circuit connected to the SiPM output is shown in Fig. 4.18.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{Graphics/SiPM/"AmpliferReadout"}
+  {\caption*{Fig. 4.18: Output at the end of the amplifier circuit when the 2 SiPM output signals are fed in. Again, two values for the total number of microcells were simulated: $N=400$ (solid line) and $N=3600$ (dashed line).}}
+\end{figure}
+
+\subsection{Practical Application}
+
+\noindent Here we relate our knowledge of SiPMs back to the spark chamber and consider the practicality of using these devices as part of the trigger system. At \(T=20^\circ C\), \(DCR \sim 1\times 10^5 \ cps \ mm^{-2}\). For \(N\) microcells per $mm^{2}$ and assuming the microcells fire independently with equal probability, we can model the dark count of a cell using a Poisson distribution with parameter, $\lambda$:
+
+\[
+  \lambda = \frac{DCR \cdot \tau}{N}
+\]
+
+\noindent where $\tau$ denotes the characteristic timescale of interest. In our case, $\tau \sim 100ns$ - the timescale associated with a microcell's recovery time. Thus, the probability of the cell firing at least once:
+
+\begin{align*}
+  P(N>0) &= 1-P(N=0)& \\
+  &= 1-e^{-\lambda}& \\
+  &\sim 2.5\times 10^{-5}, & (\lambda = 2.5\times 10^{-5})
+\end{align*}
+
+\noindent Hence, if a photon arrives at the microcell surface, the probability that the microcell has already fired as a dark count is negligible and therefore, the microcell is ready to detect an incident photon. This simple analysis does not factor in the robability of afterpulses or optical crosstalk but these factors become negligible when we factor in that the scintillators have light yields of several thousands of photons per $MeV$. \cite{herbert2006} Even a SiPM signal that corresponds to several photons is usually enough to distinguish a signal from noise given a suitable voltage threshold.
+
+Let us assume further that we have two independent sensors at the top and bottom of a spark chamber. If the chamber height is $\sim 1m$ and cosmic rays move close to the speed of light, $v\sim c$, it will take $\sim 3.3ns$ for a cosmic ray to pass through the two sensors. Given a more lenient timescale of $10ns$ and repeating the above calculation, we can deduce that if we see (nearly) coincident signals in the two sensors, it is almost guaranteed to be a cosmic ray and not due to the random firing of the microcells. Due to the fast leading edge when a photon is detected, the use of SiPMs are theoretically ideal for use in this situation in series with a coincidence logic circuit.
